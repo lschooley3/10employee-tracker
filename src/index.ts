@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-import { pool, connectToDb } from "./connections.ts";
+import { pool, connectToDb } from "./connections.js";
 
 await connectToDb();
 
@@ -32,6 +32,7 @@ async function startMenu() {
               console.log(err);
             }
             console.table(res.rows);
+            startMenu();
           });
           break;
         case "View all roles":
@@ -42,6 +43,7 @@ async function startMenu() {
               console.log(err);
             }
             console.table(res.rows);
+            startMenu();
           });
           break;
         case "View all departments":
@@ -52,6 +54,7 @@ async function startMenu() {
               console.log(err);
             }
             console.table(res.rows);
+            startMenu();
           });
           break;
         case "Add an employee":
@@ -95,11 +98,12 @@ async function startMenu() {
                   answers.role_id,
                   answers.manager_id,
                 ];
-                pool.query(employeeAddSQL, employeeAddParams, (err, res) => {
+                pool.query(employeeAddSQL, employeeAddParams, (err) => {
                   if (err) {
                     console.log(err);
                   }
                   console.log("Employee added successfully!");
+                  startMenu();
                 });
               });
           });
@@ -139,11 +143,12 @@ async function startMenu() {
                   answers.salary,
                   answers.department_id,
                 ];
-                pool.query(roleAddSQL, roleAddParams, (err, res) => {
+                pool.query(roleAddSQL, roleAddParams, (err) => {
                   if (err) {
                     console.log(err);
                   }
                   console.log("Role added successfully!");
+                  startMenu();
                 });
               });
           });
@@ -161,11 +166,12 @@ async function startMenu() {
             .then((answers) => {
               let departmentAddSQL = `INSERT INTO department (name) VALUES ($1)`;
               let departmentAddParams = [answers.name];
-              pool.query(departmentAddSQL, departmentAddParams, (err, res) => {
+              pool.query(departmentAddSQL, departmentAddParams, (err) => {
                 if (err) {
                   console.log(err);
                 }
                 console.log("Department added successfully!");
+                startMenu();
               });
             });
           break;
@@ -214,11 +220,12 @@ async function startMenu() {
                   pool.query(
                     employeeUpdateSQL,
                     employeeUpdateParams,
-                    (err, res) => {
+                    (err) => {
                       if (err) {
                         console.log(err);
                       }
                       console.log("Employee role updated successfully!");
+                      startMenu();
                     }
                   );
                 });
